@@ -65,6 +65,22 @@ var manchester = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/
   pane: 'tilepane'
 }).addTo(map);
 
+var chester = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+})
+
+var enosburgh = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+})
+
+var moretown = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+})
+
+var burlington = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+})
+
 var range = document.getElementById('range');
 
 function clip() {
@@ -73,6 +89,10 @@ function clip() {
       clipX = nw.x + (se.x - nw.x) * range.value;
 
   manchester.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  chester.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  enosburgh.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  moretown.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  burlington.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
 }
 
 range['oninput' in range ? 'oninput' : 'onchange'] = clip;
