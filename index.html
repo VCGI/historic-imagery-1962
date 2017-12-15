@@ -44,6 +44,11 @@
     opacity: 0.85;
     cursor: pointer;
 }
+
+img:not([src]) {
+    content: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+}
+
 </style>
 <div id='map'></div>
 <input id='range' class='slider' type='range' min='0' max='1.0' step='any' />
