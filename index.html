@@ -52,7 +52,7 @@ var map = L.mapbox.map('map').setView([43.17679, -73.05727], 16);
 map.createPane('tilepane');
 map.getPane('tilepane').style.zIndex = 650;
 
-var imgurl = "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR_WM_CACHE/ImageServer";
+var imgurl = 'https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR_WM_CACHE/ImageServer';
 
 var img = L.esri.imageMapLayer({
   url: imgurl,
