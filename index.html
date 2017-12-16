@@ -8,6 +8,8 @@
    <script src="https://unpkg.com/esri-leaflet@2.1.1/dist/esri-leaflet.js"
    integrity="sha512-ECQqaYZke9cSdqlFG08zSkudgrdF6I1d8ViSa7I3VIszJyVqw4ng1G8sehEXlumdMnFYfzY0tMgdQa4WCs9IUw=="
    crossorigin=""></script>
+   <script src="js/L.Control.Window.js"></script>
+   <link rel="stylesheet" href="css/L.Control.Window.css" />
    <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
   <style>
    body { margin:0; padding:0; }
@@ -16,13 +18,77 @@
 </head>
 <body>
 <style>
+.maptitle {
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+  border: 2px solid #303030;
+  border-radius: 50px;
+  font-size: 400%;
+  line-height: 18px;
+  background-color: #303030;
+  font-style: italic;
+  font-weight: bold;
+  padding: 30px;
+  color: #fff;
+  text-align: center;
+}
+
+.leaflet-horizontalcenter {
+    position: absolute;
+    left: 50%; /* possible because the placeholder's parent is the map */
+    transform: translateX(-50%); /* using the CSS3 Transform technique */
+    top: -10px;
+}
+
+.menu {
+    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+    width: 20%;
+    height: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #303030;
+    background: #fff;
+    }
+
+.menu:hover {
+    background: #FFFFFF;
+    color: #FF0000;
+}
+
+#btv {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#winooski {
+    position: absolute;
+    top: 55px;
+    right: 10px;
+}
+
+#chester {
+    position: absolute;
+    top: 100px;
+    right: 10px;
+}
+
+#manchester {
+    position: absolute;
+    top: 145px;
+    right: 10px;
+}
+
 .range {
   width: 100%;
   }
 
 .slider {
     -webkit-appearance: none;
-    margin-top: 25%;
+    margin-top: 375px;
     margin-left: -1px;
     margin-right: -1px;
     width: 100%;
@@ -34,34 +100,64 @@
     -webkit-appearance: none;
     appearance: none;
     height: 60px;
-    width: 60px;
+    width: 45px;
     background: url('images/arrow-both.svg');
+    background-color: #fff;
+    border: 6px solid #fff;
+    border-radius: 3px;
     background-repeat: no-repeat;
     background-size: auto;
     transform: rotate(90deg);
-    opacity: 0.85;
+    opacity: 1.00;
     cursor: pointer;
-    border-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')
 }
 
 </style>
 <div id='map'></div>
+<nav id='btv' class='menu'>btv - south end</nav>
+<nav id='chester' class='menu'>chester</nav>
+<nav id='manchester' class='menu'>manchester</nav>
+<nav id='winooski' class='menu'>winooski</nav>
 <input id='range' class='slider' type='range' min='0' max='1.0' step='any' />
-
 <script>
 L.mapbox.accessToken = 'pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ';
-var map = L.mapbox.map('map').setView([43.17679, -73.05727], 16);
+
+var map = L.mapbox.map('map', 'mapbox.light').setView([43.265371, -72.5819], 16);
 map.createPane('tilepane');
 map.getPane('tilepane').style.zIndex = 650;
 
-var imgurl = 'https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR_WM_CACHE/ImageServer';
+var win =  L.control.window(map,{content:'Pull the slider to reveal recent imagery.<br><br>Zoom in and out to observe change at different scales.<br><div style="text-align:right"><a href="http://vcgi.vermont.gov" target="_blank"><img src="images/logo.png" alt="logo" height="42"></a>',modal:true})
+           .show()
+
+var imgurl = "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR_WM_CACHE/ImageServer";
 
 var img = L.esri.imageMapLayer({
   url: imgurl,
   zIndex: 0
 }).addTo(map);
 
+var baselayers = {
+};
+
+var overlays = {
+  "color imagery": img
+};
+
+L.control.layers(baselayers, overlays, {position: 'topleft'}).addTo(map);
+
 var manchester = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.b2c0xelz/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+}).addTo(map);
+
+var chester = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.0j1u1wcq/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+}).addTo(map);
+
+var winooski = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.3nj458z1/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
+  pane: 'tilepane'
+}).addTo(map);
+
+var btv = L.tileLayer('https://api.mapbox.com/v4/nqpenelope.bep2msg0/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibnFwZW5lbG9wZSIsImEiOiJjajMyeXdpZm4wMDFoMzNueXB2ZmM3eWV0In0.eTfm0daHuGvgWHEfw1nzhQ', {
   pane: 'tilepane'
 }).addTo(map);
 
@@ -71,13 +167,62 @@ function clip() {
   var nw = map.containerPointToLayerPoint([0, 0]),
       se = map.containerPointToLayerPoint(map.getSize()),
       clipX = nw.x + (se.x - nw.x) * range.value;
-
+      
   manchester.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  chester.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  winooski.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+  btv.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
 }
 
 range['oninput' in range ? 'oninput' : 'onchange'] = clip;
 map.on('move', clip);
 clip();
+
+document.getElementById('btv').addEventListener('click', function () {
+    map.flyTo([44.4585, -73.219], 16);
+});
+
+document.getElementById('chester').addEventListener('click', function () {
+    map.flyTo([43.265371, -72.5799], 16);
+});
+
+document.getElementById('manchester').addEventListener('click', function () {
+    map.flyTo([43.175, -73.056], 17);
+});
+
+document.getElementById('winooski').addEventListener('click', function () {
+    map.flyTo([44.49, -73.189], 17);
+});
+
+function addControlPlaceholders(map) {
+    var corners = map._controlCorners,
+        l = 'leaflet-',
+        container = map._controlContainer;
+
+    function createCorner(vSide, hSide) {
+        var className = l + vSide + ' ' + l + hSide;
+
+        corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+    }
+
+    createCorner('horizontalcenter', 'top');
+    createCorner('horizontalcenter', 'bottom');
+}
+addControlPlaceholders(map);
+
+var maptitle = L.control({position: 'horizontalcentertop'});
+
+maptitle.onAdd = function (map) {
+
+  var div = L.DomUtil.create('div', 'info maptitle');
+
+  div.innerHTML = '1962';
+
+  return div;
+
+};
+
+maptitle.addTo(map);
 
 </script>
 </body>
